@@ -1,0 +1,15 @@
+{
+  "name": "nodehw_1",
+  "version": "1.0.0",
+  "description": "Node JS homework 1",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "server": "nodemon server.js"
+  },
+  "author": "Tanya Hlopenkova",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}
