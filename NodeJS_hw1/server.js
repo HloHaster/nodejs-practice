@@ -1,8 +1,6 @@
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
-const url = require('url');
-const { parse } = require('querystring');
 
 const server = http.createServer((req, res) => {
 
@@ -15,7 +13,39 @@ const server = http.createServer((req, res) => {
         return;
     }
 
-    // 3.3 Обработать маршрутов (/ -> index.html, /about -> about.html, /services -> services.html)
+    // 3.5 Работа с типами (методами) запросов POST, PUT, DELETE, PATCH
+
+    const baseURL =  req.protocol + '://' + req.headers.host + '/';
+    const reqUrl = new URL(req.url,baseURL);
+    console.log(reqUrl);
+
+    if (req.method === 'GET' && req.url === '/get') {
+        getMethod(req, res);
+        return;
+    }
+
+    if (req.method === 'POST' && reqUrl.pathname === '/post') {
+        postMethod(req, res, reqUrl);
+        return;
+    }
+
+    if (req.method === 'PUT' && reqUrl.pathname === '/put') {
+        putMethod(req, res, reqUrl);
+        return;
+    }
+
+    if (req.method === 'PATCH' && reqUrl.pathname === '/patch') {
+        console.log('In patch method but do post')
+        postMethod(req, res, reqUrl);
+        return;
+    }
+
+    if (req.method === 'DELETE' && reqUrl.pathname === '/delete') {
+        deleteMethod(req, res, reqUrl);
+        return;
+    }
+
+    // 3.3 Обработать маршруты (/ -> index.html, /about -> about.html, /services -> services.html)
     let filePath = path.join(__dirname, 'html', req.url === '/' ? 'index.html' : req.url)
     const ext = path.extname(filePath);
 
@@ -43,22 +73,6 @@ const server = http.createServer((req, res) => {
             res.end(content);
         }
     })
-
-
-
-    // 3.5 Работа с типами (методами) запросов POST, PUT, DELETE, PATCH
-
-    const baseURL =  req.protocol + '://' + req.headers.host + '/';
-    const reqUrl = new URL(req.url,baseURL);
-    console.log(reqUrl);
-
-    if (req.method === 'GET' && req.url === '/get') {
-        getMethod(req, res)
-    }
-
-    if (req.method === 'POST' && reqUrl.pathname === '/post') {
-        postMethod(req, res, reqUrl);
-    }
 })
 
 
@@ -97,17 +111,66 @@ function postMethod (req, res, reqUrl) {
         objectFromFile.age = searchParams.get("age");
     }
 
-    const isExist = fs.existsSync('./text/text.txt')
-    if (isExist) {
-        fs.writeFile('./text/text.txt', JSON.stringify(objectFromFile), () => {
-            console.log('text.txt was updated')
-        })
-    } else {
-        console.log('text.txt was not updated')
-    }
+    writeFile(objectFromFile);
 
     res.writeHead(200, {
         'Content-Type': 'application/json'
     })
     res.end(JSON.stringify(objectFromFile));
+}
+
+
+function putMethod(req, res, reqUrl) {
+    let object = {};
+
+    let searchParams = reqUrl.searchParams;
+
+    if(searchParams.has("name") && searchParams.has("surname") && searchParams.has("age")){
+        object.name = searchParams.get("name");
+        object.surname = searchParams.get("surname");
+        object.age = searchParams.get("age");
+    }
+
+    writeFile(object);
+
+    res.writeHead(200, {
+        'Content-Type': 'application/json'
+    })
+    res.end(JSON.stringify(object));
+}
+
+function deleteMethod(req, res, reqUrl) {
+    let objectFromFile = JSON.parse(fs.readFileSync("./text/text.txt", "utf8"))
+
+    let searchParams = reqUrl.searchParams;
+
+    if(searchParams.has("name")){
+        delete objectFromFile.name;
+    }
+
+    if(searchParams.has("surname")){
+        delete objectFromFile.surname;
+    }
+
+    if(searchParams.has("age")){
+        delete objectFromFile.age;
+    }
+
+    writeFile(objectFromFile);
+
+    res.writeHead(200, {
+        'Content-Type': 'application/json'
+    })
+    res.end(JSON.stringify(objectFromFile));
+}
+
+function writeFile(obj) {
+    const isExist = fs.existsSync('./text/text.txt')
+    if (isExist) {
+        fs.writeFile('./text/text.txt', JSON.stringify(obj), () => {
+            console.log('text.txt was updated')
+        })
+    } else {
+        console.log('text.txt was not updated')
+    }
 }
