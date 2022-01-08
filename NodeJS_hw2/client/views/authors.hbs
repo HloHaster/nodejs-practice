@@ -1,0 +1,16 @@
+<h1 style="margin-bottom: 10px; margin-top: 20px;">AUTHORS</h1>
+
+{{#if haveAuthors}}
+    <div class="posts" style="display: flex; flex-wrap: wrap; justify-content: space-between">
+        {{#each authors}}
+            <div class="card" style="width: 47%; margin-bottom: 10px;">
+                <div class="card-body">
+                    <h5 class="card-title" style="font-weight: bold;"><a href="authors/{{_id}}">{{name}}</a></h5>
+                    <p>Email: {{email}} </p>
+                </div>
+            </div>
+        {{/each}}
+    </div>
+{{else}}
+    <div>Nothing Found</div>
+{{/if}}

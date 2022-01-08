@@ -1,0 +1,34 @@
+<h1 style="margin-bottom: 10px; margin-top: 20px;">POSTS</h1>
+
+{{#if havePosts}}
+    <div class="posts" style="display: flex; flex-wrap: wrap; justify-content: space-between">
+    {{#each posts}}
+            <div class="card" style="width: 47%; margin-bottom: 10px;">
+                <div class="card-body">
+                    {{#if thumbnail}}
+                        <img style="width: 100%; height: 300px; object-fit: cover; margin-bottom: 10px" src="{{thumbnail}}"
+                             alt="thumbnail">
+                    {{/if}}
+                    <h5 class="card-title" style="font-weight: bold;">{{name}}</h5>
+                    <p class="card-text">{{body}}</p>
+                    {{#if excerpt}}
+                        <p>Excerpt: "{{excerpt}}..."</p>
+                    {{/if}}
+                    <p class="card-text"><span>Categories:</span> {{#each categories}} {{this}} {{/each}}</p>
+                    <p class="card-text"><span>Authors:</span> {{#each authors}} {{this}} {{/each}}</p>
+                    <p class="card-text"><span>Tags:</span> {{#each tags}} {{this}} {{/each}}</p>
+                    <div class="card-time">
+                        <p>Created: {{createdAt}}</p>
+                        <p>Updated: {{updatedAt}}</p>
+                    </div>
+                    <a href="/posts/{{_id}}" class="btn btn-primary">READ MORE</a>
+                </div>
+            </div>
+    {{/each}}
+    </div>
+{{else}}
+    <div>Nothing Found</div>
+{{/if}}
+
+
+

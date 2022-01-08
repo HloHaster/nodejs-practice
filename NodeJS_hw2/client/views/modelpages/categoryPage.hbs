@@ -1,0 +1,12 @@
+<h1>CATEGORY</h1>
+
+{{#if haveCategory}}
+    <p>Name: {{category.name}}</p>
+    {{#if category.excerpt}}
+        <p>Excerpt: {{category.excerpt}}</p>
+    {{/if}}
+    <p>Created: {{category.createdAt}}</p>
+    <p>Updated: {{category.updatedAt}}</p>
+{{else}}
+    <div>Nothing Found</div>
+{{/if}}

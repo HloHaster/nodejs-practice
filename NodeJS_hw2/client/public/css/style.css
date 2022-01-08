@@ -1,0 +1,27 @@
+.card-text span{
+    font-weight: bold;
+}
+
+.card-time {
+    display: flex;
+    justify-content: space-between;
+    color: darkgray;
+}
+
+.card_post-information {
+    display: flex;
+}
+
+.post-information_data {
+    margin-left: 35px;
+}
+
+.card_post-information img{
+    margin-left: 35px;
+    border-radius: 5%;
+}
+
+.data_name {
+    font-weight: bold;
+    font-size: 40px;
+}
